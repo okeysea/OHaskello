@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  haskell:
+    build:
+      context: .
+      dockerfile: ./container/haskell/Dockerfile
+    volumes:
+      - ./volumes:/volume
