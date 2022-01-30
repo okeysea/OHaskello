@@ -6,8 +6,8 @@ import System.IO (stdin, stdout, hReady, hSetEcho, hSetBuffering, BufferMode (No
 import Control.Monad.IO.Class
 import Data.Bits -- ビット操作
 
-data InputKey = KUp | KDown | KRight | KLeft | KSpace | KUnknown
-data GameSequences = GsOpening | GsInGame
+data InputKey = KUp | KDown | KRight | KLeft | KSpace | KQ | KUnknown
+data GameSequences = GsOpening | GsInGame | GsExit
 data GameStates = GameStates{
                               gsSequence :: GameSequences
                             , gsCurPos   :: TypeDefs.Pos
@@ -45,6 +45,7 @@ convKey k =
     "\ESC[B"  -> KDown
     "\ESC[C"  -> KRight
     "\ESC[D"  -> KLeft
+    "q"       -> KQ
     otherwise -> KUnknown
 
 initGameState :: IO GameStates
@@ -55,6 +56,7 @@ initBoard :: TypeDefs.Board
 initBoard = TypeDefs.Board 0x0000001008000000 0x0000000810000000
 
 othelloGame :: GameStates -> IO ()
+othelloGame GameStates{gsSequence=GsExit} = return ()
 othelloGame st = do
   putStr $ CU.cls
   putStr $ dispBoard $ gsBoard st
@@ -167,6 +169,7 @@ updateGameState ik gs =
     KDown    -> gs{gsCurPos=(acc ( 0,  1) (gsCurPos gs))}
     KRight   -> gs{gsCurPos=(acc ( 1,  0) (gsCurPos gs))}
     KLeft    -> gs{gsCurPos=(acc (-1,  0) (gsCurPos gs))}
+    KQ       -> gs{gsSequence=GsExit}
     KUnknown -> gs
   where
     acc (x, y) (x', y') = (maxOrMin(x+x'),maxOrMin(y+y'))
