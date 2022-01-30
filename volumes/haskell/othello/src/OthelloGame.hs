@@ -155,7 +155,7 @@ drawCursor p b = (black) ++ (white) ++ (blank)
     white = if whiteCheck (posToIdx p) b
                then CU.writeClrC (idxToDispPos (posToIdx p)) CU.CGreen pieceWhite
                else ""
-    blank = if not ((blackCheck (posToIdx p) b) && (whiteCheck (posToIdx p) b))
+    blank = if not ((blackCheck (posToIdx p) b) || (whiteCheck (posToIdx p) b))
                then CU.writeClrC (idxToDispPos (posToIdx p)) CU.CGreen "C"
                else ""
 
