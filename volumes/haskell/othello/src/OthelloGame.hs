@@ -23,6 +23,7 @@ doMain = do
   ioSetting
   othelloGame =<< initGameState
 
+-- バッファリングされないように設定
 ioSetting :: IO ()
 ioSetting = do
   hSetBuffering stdin  NoBuffering
@@ -158,6 +159,7 @@ drawCursor p b = (black) ++ (white) ++ (blank)
                then CU.writeClrC (idxToDispPos (posToIdx p)) CU.CGreen "C"
                else ""
 
+-- ゲームステートを更新
 updateGameState :: InputKey -> GameStates -> GameStates
 updateGameState ik gs = 
   case ik of
